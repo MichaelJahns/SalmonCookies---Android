@@ -6,6 +6,12 @@ public class Store {
     private int minCustomers;
     private int maxCustomers;
 
+    public Store(){
+        this.location = "Seattle";
+        this.averageSales = 6.65f;
+        this.minCustomers = 23;
+        this.maxCustomers = 39;
+    }
     public Store(String location, float averageSales, int minCustomers, int maxCustomers) {
         this.location = location;
         this.averageSales = averageSales;

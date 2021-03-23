@@ -20,18 +20,21 @@ public final class StoreDAO {
     }
 
     public void addStore(Store store) {
+        storeList.add(store);
+        updateStores();
     }
 
-    private final void initializeStores(){
-        this.storeList = StoreFactory.INSTANCE.getStores();
-    }
-    private final void updateStores(){
+    private void updateStores(){
         this.stores.setValue(this.storeList);
     }
 
     public StoreDAO(){
-        this.storeList = new ArrayList();
-        this.stores = new MutableLiveData<List<Store>>();
-        this.initializeStores();
+        this.storeList = new ArrayList<>();
+        this.stores = new MutableLiveData<>();
+        this.initStores();
+    }
+
+    public void initStores() {
+        this.storeList = StoreFactory.INSTANCE.getStores();
     }
 }

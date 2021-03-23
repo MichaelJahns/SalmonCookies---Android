@@ -13,26 +13,26 @@ import com.leyline.salmoncookies.views.StoreLocationText;
 
 import java.util.List;
 
-public class StorePageAdapter extends RecyclerView.Adapter<StorePageAdapter.ViewPager2Holder> {
+public class StorePageAdapter extends RecyclerView.Adapter<StorePageAdapter.StoreViewHolder> {
     private List<Store> stores;
     public StorePageAdapter(List<Store> stores){
         this.stores = stores;
     }
     @NonNull
     @Override
-    public ViewPager2Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.store_row, parent, false);
-        return new ViewPager2Holder(view);
+    public StoreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.store_row, parent, false);
+        return new StoreViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewPager2Holder holder, int position) {
+    public void onBindViewHolder(@NonNull StoreViewHolder holder, int position) {
         Store store = this.stores.get(position);
         holder.evLocation.setText(store.getLocation());
-        holder.minCust.setText(store.getMinCustomers());
-        holder.maxCust.setText(store.getMaxCustomers());
-        holder.salesPerCust.setText(store.getAverageSales().toString());
-
+        holder.minCust.setText(String.valueOf(store.getMinCustomers()));
+        holder.maxCust.setText(String.valueOf(store.getMaxCustomers()));
+        holder.salesPerCust.setText(String.valueOf(store.getMinCustomers()));
     }
 
     @Override
@@ -40,14 +40,18 @@ public class StorePageAdapter extends RecyclerView.Adapter<StorePageAdapter.View
         return this.stores.size();
     }
 
-    public static class ViewPager2Holder extends RecyclerView.ViewHolder {
+    public static class StoreViewHolder extends RecyclerView.ViewHolder {
         private StoreLocationText evLocation;
         private TextView minCust;
         private TextView maxCust;
         private TextView salesPerCust;
 
-        public ViewPager2Holder(@NonNull View itemView) {
+        public StoreViewHolder(@NonNull View itemView) {
             super(itemView);
+            evLocation = itemView.findViewById(R.id.evStoreLocation);
+            minCust = itemView.findViewById(R.id.evStoreMinCust);
+            maxCust = itemView.findViewById(R.id.evStoreMaxCust);
+            salesPerCust = itemView.findViewById(R.id.evStoreSalePerCust);
         }
     }
 }

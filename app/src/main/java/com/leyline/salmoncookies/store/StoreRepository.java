@@ -22,7 +22,13 @@ public class StoreRepository {
     public LiveData<List<Store>> getStores() {
         return this.storeDAO.getStores();
     }
+    public void initStores() {
+        this.storeDAO.initStores();
+    }
+
     private StoreRepository(StoreDAO storeDAO){
         this.storeDAO = storeDAO;
     }
+
+
 }

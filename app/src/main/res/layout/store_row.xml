@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
   <com.leyline.salmoncookies.views.StoreLocationText
-        android:id="@+id/evStoreLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="89dp"
-        android:text="@string/location"
-        android:textSize="32sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+      android:id="@+id/evStoreLocation"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="48dp"
+      android:layout_marginTop="36dp"
+      android:text="@string/location"
+      android:textSize="32sp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
       android:id="@+id/evStoreMinCust"
@@ -41,6 +41,9 @@
       android:id="@+id/evStoreSalePerCust"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/salesPerCustomer" />
+      android:text="@string/salesPerCustomer"
+      app:layout_constraintEnd_toEndOf="@+id/evStoreMaxCust"
+      app:layout_constraintStart_toStartOf="@+id/evStoreMaxCust"
+      app:layout_constraintTop_toBottomOf="@+id/evStoreMaxCust" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

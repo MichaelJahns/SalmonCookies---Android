@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginStart="16dp"
+        android:onClick="getUserStore"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+    <EditText
+        android:id="@+id/etStoreLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etStoreAverageSales"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/salesPerCustomer"
+        app:layout_constraintEnd_toEndOf="@+id/etStoreLocation"
+        app:layout_constraintStart_toStartOf="@+id/etStoreLocation"
+        app:layout_constraintTop_toBottomOf="@id/etStoreLocation" />
+
+    <EditText
+        android:id="@+id/etStoreMinCust"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/minDailyCustomers"
+        app:layout_constraintEnd_toEndOf="@+id/etStoreLocation"
+        app:layout_constraintStart_toStartOf="@+id/etStoreLocation"
+        app:layout_constraintTop_toBottomOf="@id/etStoreAverageSales" />
+
+    <EditText
+        android:id="@+id/etStoreMaxCust"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/maxDailyCustomers"
+        app:layout_constraintEnd_toEndOf="@+id/etStoreLocation"
+        app:layout_constraintStart_toStartOf="@+id/etStoreLocation"
+        app:layout_constraintTop_toBottomOf="@id/etStoreMinCust" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
