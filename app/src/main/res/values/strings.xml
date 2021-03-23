@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SalmonCookies</string>
+    <string name="location"> Location </string>
+    <string name="salesPerCustomer"> Average Sales Per Customer </string>
+    <string name="minDailyCustomers"> Minimum Daily Customers </string>
+    <string name="maxDailyCustomers"> Maximum Daily Customers </string>
+    <string name="totalDailySales"> Total Daily Sales </string>
+
+
+</resources>

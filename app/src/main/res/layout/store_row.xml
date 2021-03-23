@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <com.leyline.salmoncookies.views.StoreLocationText
+        android:id="@+id/evStoreLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="89dp"
+        android:text="@string/location"
+        android:textSize="32sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+      android:id="@+id/evStoreMinCust"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/minDailyCustomers"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.488"
+      app:layout_constraintStart_toEndOf="@+id/evStoreLocation"
+      app:layout_constraintTop_toTopOf="@+id/evStoreLocation" />
+
+  <TextView
+      android:id="@+id/evStoreMaxCust"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/maxDailyCustomers"
+      app:layout_constraintBottom_toBottomOf="@+id/evStoreLocation"
+      app:layout_constraintEnd_toEndOf="@+id/evStoreMinCust"
+      app:layout_constraintStart_toStartOf="@+id/evStoreMinCust"
+      app:layout_constraintTop_toBottomOf="@+id/evStoreMinCust"
+      app:layout_constraintVertical_bias="1.0" />
+
+  <TextView
+      android:id="@+id/evStoreSalePerCust"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/salesPerCustomer" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
