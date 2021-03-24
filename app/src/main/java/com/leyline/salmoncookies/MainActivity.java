@@ -1,6 +1,7 @@
 package com.leyline.salmoncookies;
 
 import android.content.Intent;
+import android.graphics.HardwareRenderer;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -12,6 +13,8 @@ import com.leyline.salmoncookies.util.InjectorUtilities;
 import com.leyline.salmoncookies.util.StoreModelFactory;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,29 +25,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private StoreModel storeModel;
     private StoreModelFactory storeModelFactory;
-    private List<Store> stores;
+    private StoreModel storeModel;
+    private StoreListFragment storeListFragment;
     RecyclerView rvStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        storeListFragment = new StoreListFragment();
         storeModelFactory = InjectorUtilities.instance.provideStoreModelFactory();
-        storeModel = new ViewModelProvider(this, storeModelFactory).get(StoreModel.class);
-        stores = storeModel.getStores().getValue();
         storeModel.initStores();
-        storeModel.getStores().observe(this, stores -> {
-            this.stores = stores;
-            initUI();
-        });
 
         bindUI();
+        initUI();
+    }
+    private void initUI(){
+        storeModel = new ViewModelProvider(this, storeModelFactory).get(StoreModel.class);
+        setCurrentFragment(storeListFragment);
     }
     private void bindUI(){
-
-        rvStore = findViewById(R.id.rvStore);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,20 +52,17 @@ public class MainActivity extends AppCompatActivity {
                 intentToAdd();
             }
         });
-        initUI();
     }
 
-    private void initUI() {
-        stores = storeModel.getStores().getValue();
-        startViewPager();
-    }
     private void intentToAdd(){
         Intent intent = new Intent(this, AddActivity.class);
         startActivity(intent);
     }
-    private void startViewPager(){
-        StorePageAdapter adapter = new StorePageAdapter(this.stores);
-        rvStore.setAdapter(adapter);
-        rvStore.setLayoutManager(new LinearLayoutManager(this));
+
+    private FragmentTransaction setCurrentFragment(Fragment fragment){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainFrameLayout, fragment);
+        transaction.commit();
+        return transaction;
     }
 }
