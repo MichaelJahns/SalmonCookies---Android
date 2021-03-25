@@ -1,21 +1,36 @@
 package com.leyline.salmoncookies.store;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class StoreModel extends ViewModel {
-    private StoreRepository storeRepository;
+    private List<Store> storeList;
+    private MutableLiveData<List<Store>> stores;
 
-    public final LiveData<List<Store>> getStores() { return this.storeRepository.getStores();}
-    public final void initStores(){this.storeRepository.initStores();}
-    public final void addStore(Store store) { this.storeRepository.addStore(store);}
+    public LiveData<List<Store>> getStores(){
+        return stores;
+    }
 
-    public StoreModel(){}
+    public void addStore(Store store) {
+        storeList.add(store);
+        updateStores();
+    }
+    private void updateStores(){
+        this.stores.setValue(this.storeList);
+    }
 
-    public StoreModel(StoreRepository storeRepository){
-        super();
-        this.storeRepository = storeRepository;
+    private @NotNull List<Store> initStoreList() {
+        return StoreFactory.INSTANCE.getStores();
+    }
+
+    public StoreModel(){
+            stores = new MutableLiveData<>();
+            storeList = initStoreList();
+            updateStores();
     }
 }

@@ -25,25 +25,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private StoreModelFactory storeModelFactory;
     private StoreModel storeModel;
     private StoreListFragment storeListFragment;
-    RecyclerView rvStore;
+    private AddFragment addFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        storeModel = new ViewModelProvider(this).get(StoreModel.class);
+        storeModel.getStores();
+        storeModel.getStores().observe(this, stores -> {
+            intentToList();
+        });
         storeListFragment = new StoreListFragment();
-        storeModelFactory = InjectorUtilities.instance.provideStoreModelFactory();
-        storeModel.initStores();
-
+        addFragment = new AddFragment();
         bindUI();
-        initUI();
-    }
-    private void initUI(){
-        storeModel = new ViewModelProvider(this, storeModelFactory).get(StoreModel.class);
         setCurrentFragment(storeListFragment);
     }
+
     private void bindUI(){
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,11 +52,20 @@ public class MainActivity extends AppCompatActivity {
                 intentToAdd();
             }
         });
+        FloatingActionButton fab2 = findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intentToList();
+            }
+        });
     }
 
-    private void intentToAdd(){
-        Intent intent = new Intent(this, AddActivity.class);
-        startActivity(intent);
+    public void intentToAdd(){
+        setCurrentFragment(addFragment);
+    }
+    public void intentToList(){
+        setCurrentFragment(storeListFragment);
     }
 
     private FragmentTransaction setCurrentFragment(Fragment fragment){
