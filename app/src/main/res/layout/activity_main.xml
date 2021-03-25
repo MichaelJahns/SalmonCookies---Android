@@ -33,4 +33,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <include
+        android:id="@+id/mainNavigationView"
+        layout="@layout/fragment_navigation" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
