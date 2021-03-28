@@ -15,6 +15,11 @@ public interface StoreDAO {
     @Insert
     void addStore(Store store);
 
+    @Query("DELETE FROM stores WHERE storeLocation = :name")
+    void deleteStore(String name);
+
+    @Query("SELECT * FROM stores WHERE storeLocation = :name")
+    List<Store> findStore(String name);
     @Query("SELECT * FROM stores")
     LiveData<List<Store>> getAllStores();
 

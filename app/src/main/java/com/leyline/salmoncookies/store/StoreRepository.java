@@ -1,34 +1,83 @@
 package com.leyline.salmoncookies.store;
 
+import android.app.Application;
+import android.os.AsyncTask;
+
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
-public class StoreRepository {
+public class StoreRepository{
+    private MutableLiveData<List<Store>> stores = new MutableLiveData<>();
+    private LiveData<List<Store>> allStores;
     private final StoreDAO storeDAO;
-    private static volatile StoreRepository instance;
 
-    public synchronized static StoreRepository getInstance(StoreDAO storeDAO) {
-        if(instance == null){
-            instance = new StoreRepository(storeDAO);
+    public StoreRepository(Application application){
+        StoreDatabase db;
+        db = StoreDatabase.getInstance(application);
+        storeDAO = db.storeDAO();
+        allStores = storeDAO.getAllStores();
+    }
+
+    private void asyncFinished(List<Store> storeList){
+        stores.setValue(storeList);
+    }
+
+    public void findStore(String name){
+        QueryAsyncTask task = new QueryAsyncTask(storeDAO);
+        task.delegate = this;
+        task.execute(name);
+    }
+    private static class QueryAsyncTask extends AsyncTask<String, Void, List<Store>>{
+        private StoreDAO asyncTaskDao;
+        private StoreRepository delegate = null;
+        QueryAsyncTask(StoreDAO dao){
+            asyncTaskDao = dao;
         }
-        return instance;
-    }
 
-    public void addStore(Store store) {
-        this.storeDAO.addStore(store);
+        @Override
+        protected List<Store> doInBackground(String... strings) {
+            return asyncTaskDao.findStore(strings[0]);
+        }
+        @Override
+        protected void onPostExecute(List<Store> result) {
+            delegate.asyncFinished(result);
+        }
     }
-
-    public LiveData<List<Store>> getStores() {
-        return this.storeDAO.getStores();
+    public void insertStore(Store store){
+        InsertAsyncTask task = new InsertAsyncTask(storeDAO);
+        task.execute(store);
     }
-    public void initStores() {
-        this.storeDAO.initStores();
+    ﻿﻿private static class InsertAsyncTask extends AsyncTask<Store, Void, Void> {
+
+        private StoreDAO asyncTaskDao;
+
+        InsertAsyncTask(StoreDAO dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Store... params) {
+            asyncTaskDao.addStore(params[0]);
+            return null;
+        }
     }
-
-    private StoreRepository(StoreDAO storeDAO){
-        this.storeDAO = storeDAO;
+    public void deleteStore(String name){
+        DeleteAsyncTask task = new DeleteAsyncTask(storeDAO);
+        task.execute(name);
     }
+    private static class DeleteAsyncTask extends AsyncTask<String, Void, Void>{
+        private StoreDAO asyncTaskDao;
 
+        DeleteAsyncTask(StoreDAO dao){
+            asyncTaskDao = dao;
+        }
 
+        @Override
+        protected Void doInBackground(String... strings) {
+            asyncTaskDao.deleteStore(strings[0]);
+            return null;
+        }
+    }
 }
