@@ -7,7 +7,7 @@ public final class InjectorUtilities {
     public static final InjectorUtilities instance;
 
     public final StoreModelFactory provideStoreModelFactory(){
-        StoreRepository storeRepository = StoreRepository.getInstance(StoreDatabase.getInstance().getStoreDAO());
+        StoreRepository storeRepository = StoreRepository.getInstance(StoreDatabase.getINSTANCE().getStoreDAO());
         return new StoreModelFactory(storeRepository);
     }
     static {

@@ -1,20 +1,26 @@
 package com.leyline.salmoncookies.store;
 
-public final class StoreDatabase {
-    private StoreDAO storeDAO;
-    private static volatile StoreDatabase instance;
+import android.content.Context;
 
-    public final StoreDAO getStoreDAO(){
-        return this.storeDAO;
-    }
-    public synchronized static StoreDatabase getInstance() {
-        if(instance == null){
-            instance = new StoreDatabase();
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+
+@Database(entities = {Store.class}, version = 1)
+public abstract class StoreDatabase extends RoomDatabase {
+    public abstract StoreDAO storeDAO();
+    private static StoreDatabase INSTANCE;
+
+    static StoreDatabase getInstance(final Context context){
+        if(INSTANCE == null){
+            synchronized (StoreDatabase.class){
+                if(INSTANCE == null){
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            StoreDatabase.class,
+                            "store_database").build();
+                }
+            }
         }
-        return instance;
-    }
-
-    private StoreDatabase(){
-        this.storeDAO = new StoreDAO();
+        return INSTANCE;
     }
 }

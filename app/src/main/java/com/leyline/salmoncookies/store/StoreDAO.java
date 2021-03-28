@@ -3,40 +3,21 @@ package com.leyline.salmoncookies.store;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.Query;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Dao
-public final class StoreDAO {
-    private List<Store> storeList;
-    private final MutableLiveData<List<Store>> stores;
+public interface StoreDAO {
 
-    public final LiveData<List<Store>> getStores() {
-        MutableLiveData<List<Store>> data = this.stores;
-        if(data == null){
-            throw new NullPointerException("null cannot be cast to non-null type androidx.lifecycle.LiveData<kotlin.collections.List<com.michaeljahns.namespace.scenario.Scenario>>");
-        } else{
-            return data;
-        }
-    }
+    @Insert
+    void addStore(Store store);
 
-    public void addStore(Store store) {
-        storeList.add(store);
-        updateStores();
-    }
+    @Query("SELECT * FROM stores")
+    LiveData<List<Store>> getAllStores();
 
-    private void updateStores(){
-        this.stores.setValue(this.storeList);
-    }
 
-    public StoreDAO(){
-        this.storeList = new ArrayList<>();
-        this.stores = new MutableLiveData<>();
-        this.initStores();
-    }
 
-    public void initStores() {
-        this.storeList = StoreFactory.INSTANCE.getStores();
-    }
 }
