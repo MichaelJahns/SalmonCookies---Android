@@ -1,6 +1,17 @@
 package com.leyline.salmoncookies.store;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "Stores")
 public class Store {
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    @ColumnInfo(name = "storeId")
+    private int id;
+    @ColumnInfo(name="storeLocation")
     private String location;
     private Float averageSales;
     private int minCustomers;
@@ -49,5 +60,13 @@ public class Store {
 
     public void setMaxCustomers(int maxCustomers) {
         this.maxCustomers = maxCustomers;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

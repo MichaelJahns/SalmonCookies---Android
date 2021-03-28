@@ -2,10 +2,12 @@ package com.leyline.salmoncookies.store;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.room.Dao;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Dao
 public final class StoreDAO {
     private List<Store> storeList;
     private final MutableLiveData<List<Store>> stores;
