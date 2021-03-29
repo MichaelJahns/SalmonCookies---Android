@@ -9,74 +9,93 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 public class StoreRepository{
-    private MutableLiveData<List<Store>> stores = new MutableLiveData<>();
+    private final MutableLiveData<List<Store>> storeSearch = new MutableLiveData<>();
     private LiveData<List<Store>> allStores;
     private final StoreDAO storeDAO;
 
     public StoreRepository(Application application){
-        StoreDatabase db;
-        db = StoreDatabase.getInstance(application);
+        StoreDatabase db = StoreDatabase.getInstance(application);
         storeDAO = db.storeDAO();
         allStores = storeDAO.getAllStores();
     }
 
     private void asyncFinished(List<Store> storeList){
-        stores.setValue(storeList);
+        storeSearch.setValue(storeList);
     }
 
-    public void findStore(String name){
-        QueryAsyncTask task = new QueryAsyncTask(storeDAO);
-        task.delegate = this;
-        task.execute(name);
-    }
-    private static class QueryAsyncTask extends AsyncTask<String, Void, List<Store>>{
-        private StoreDAO asyncTaskDao;
-        private StoreRepository delegate = null;
-        QueryAsyncTask(StoreDAO dao){
-            asyncTaskDao = dao;
-        }
 
-        @Override
-        protected List<Store> doInBackground(String... strings) {
-            return asyncTaskDao.findStore(strings[0]);
-        }
-        @Override
-        protected void onPostExecute(List<Store> result) {
-            delegate.asyncFinished(result);
-        }
+//    REPOSITORY API; exposed to UI
+    public void insert(Store store){
+        new InsertAsyncTask(storeDAO).execute(store);
     }
-    public void insertStore(Store store){
-        InsertAsyncTask task = new InsertAsyncTask(storeDAO);
-        task.execute(store);
+    public void update(Store store){
+        new UpdateAsyncTask(storeDAO).execute(store);
     }
-    ﻿﻿private static class InsertAsyncTask extends AsyncTask<Store, Void, Void> {
+    public void delete(Store store){
+        new DeleteAsyncTask(storeDAO).execute(store);
+    }
+    public void deleteAllStores(){
+        new DeleteAllAsyncTask(storeDAO).execute();
+    }
 
-        private StoreDAO asyncTaskDao;
+    public LiveData<List<Store>> getAllStores() {
+        return allStores;
+    }
+    public MutableLiveData<List<Store>> getStoreSearch(){
+        return storeSearch;
+    }
+
+//    ASYNC TASKS to move database operations off of the main thread
+    //    Static so the task doesn't have a reference to the activity, which would be a memory leak
+    // because it is static it cannot reference its parents DAO, dao must be passed into constructor
+    private static class InsertAsyncTask extends AsyncTask<Store, Void, Void>{
+
+        private final StoreDAO asyncTaskDao;
 
         InsertAsyncTask(StoreDAO dao) {
             asyncTaskDao = dao;
         }
 
+        // Store... denotes, var-args; similar to an array
         @Override
         protected Void doInBackground(final Store... params) {
             asyncTaskDao.addStore(params[0]);
             return null;
         }
     }
-    public void deleteStore(String name){
-        DeleteAsyncTask task = new DeleteAsyncTask(storeDAO);
-        task.execute(name);
-    }
-    private static class DeleteAsyncTask extends AsyncTask<String, Void, Void>{
-        private StoreDAO asyncTaskDao;
+    private static class UpdateAsyncTask extends AsyncTask<Store, Void, Void>{
 
-        DeleteAsyncTask(StoreDAO dao){
+        private final StoreDAO asyncTaskDao;
+
+        UpdateAsyncTask(StoreDAO dao) {
             asyncTaskDao = dao;
         }
 
         @Override
-        protected Void doInBackground(String... strings) {
-            asyncTaskDao.deleteStore(strings[0]);
+        protected Void doInBackground(final Store... params) {
+            asyncTaskDao.updateStore(params[0]);
+            return null;
+        }
+    }
+    private static class DeleteAsyncTask extends AsyncTask<Store, Void, Void>{
+        private final StoreDAO asyncTaskDao;
+        DeleteAsyncTask(StoreDAO dao){
+            asyncTaskDao = dao;
+        }
+        @Override
+        protected Void doInBackground(Store... params) {
+            asyncTaskDao.deleteStore(params[0]);
+            return null;
+        }
+    }
+    private static class DeleteAllAsyncTask extends AsyncTask<Void, Void, Void>{
+        private final StoreDAO asyncTaskDao;
+        DeleteAllAsyncTask(StoreDAO dao){
+            asyncTaskDao = dao;
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            asyncTaskDao.deleteAllStores();
             return null;
         }
     }

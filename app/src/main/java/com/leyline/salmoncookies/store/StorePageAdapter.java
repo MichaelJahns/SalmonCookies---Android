@@ -14,9 +14,16 @@ import com.leyline.salmoncookies.views.StoreLocationText;
 import java.util.List;
 
 public class StorePageAdapter extends RecyclerView.Adapter<StorePageAdapter.StoreViewHolder> {
-    private List<Store> stores;
-    public StorePageAdapter(List<Store> stores){
-        this.stores = stores;
+    private int storeItemLayout;
+    private List<Store> storeList;
+
+    public StorePageAdapter(int layoutId){ storeItemLayout = layoutId;}
+    public StorePageAdapter(List<Store> storeList){
+        this.storeList = storeList;
+    }
+    public void setStoreList(List<Store> stores){
+        storeList = stores;
+        notifyDataSetChanged();
     }
     @NonNull
     @Override
@@ -28,7 +35,7 @@ public class StorePageAdapter extends RecyclerView.Adapter<StorePageAdapter.Stor
 
     @Override
     public void onBindViewHolder(@NonNull StoreViewHolder holder, int position) {
-        Store store = this.stores.get(position);
+        Store store = this.storeList.get(position);
         holder.evLocation.setText(store.getLocation());
         holder.minCust.setText(String.valueOf(store.getMinCustomers()));
         holder.maxCust.setText(String.valueOf(store.getMaxCustomers()));
@@ -37,7 +44,7 @@ public class StorePageAdapter extends RecyclerView.Adapter<StorePageAdapter.Stor
 
     @Override
     public int getItemCount() {
-        return this.stores.size();
+        return this.storeList.size();
     }
 
     public static class StoreViewHolder extends RecyclerView.ViewHolder {
