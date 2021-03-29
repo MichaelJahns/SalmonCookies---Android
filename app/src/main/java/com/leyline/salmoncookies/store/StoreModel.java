@@ -15,27 +15,16 @@ public class StoreModel extends ViewModel {
     private LiveData<List<Store>> allStores;
     private MutableLiveData<List<Store>> stores;
 
-    public LiveData<List<Store>> getStores(){
+    public LiveData<List<Store>> getAllStores(){
+        return allStores;
+    }
+    public MutableLiveData<List<Store>> getStores(){
         return stores;
-    }
-
-    public void addStore(Store store) {
-        storeList.add(store);
-        updateStores();
-    }
-    private void updateStores(){
-        this.stores.setValue(this.storeList);
-    }
-
-    private @NotNull List<Store> initStoreList() {
-        return StoreFactory.INSTANCE.getStores();
     }
 
     public StoreModel(Application application){
         storeRepository = new StoreRepository(application);
-        allStores = storeRepository.
-            stores = new MutableLiveData<>();
-            storeList = initStoreList();
-            updateStores();
+        allStores = storeRepository.;
+        stores = storeRepository.s
     }
 }
