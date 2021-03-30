@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.leyline.salmoncookies.store.Store;
@@ -35,6 +36,13 @@ public class StoreListFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rvStore);
         List<Store> fake = observerSetup();
         recyclerSetup(fake);
+        Button btn0 = view.findViewById(R.id.btn0);
+        btn0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                storeViewModel.deleteAllStores();
+            }
+        });
         return view;
     }
 

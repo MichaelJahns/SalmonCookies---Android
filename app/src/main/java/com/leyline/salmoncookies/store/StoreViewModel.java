@@ -28,7 +28,7 @@ public class StoreViewModel extends ViewModel {
     public void deleteStore(Store store){
         storeRepository.delete(store);
     }
-    public void deleteAllStores(Store store){ storeRepository.deleteAllStores();}
+    public void deleteAllStores(){ storeRepository.deleteAllStores();}
 
     public StoreViewModel(@NonNull Application application){
         storeRepository = new StoreRepository(application);
