@@ -3,48 +3,55 @@ package com.leyline.salmoncookies;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.leyline.salmoncookies.store.Store;
-import com.leyline.salmoncookies.store.StoreFactory;
-import com.leyline.salmoncookies.store.StoreModel;
-import com.leyline.salmoncookies.store.StorePageAdapter;
-import com.leyline.salmoncookies.util.InjectorUtilities;
-import com.leyline.salmoncookies.util.StoreModelFactory;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.View;
 
-import java.util.List;
-import java.util.Observable;
-
 public class MainActivity extends AppCompatActivity {
-    private StoreModel storeModel;
-    private final StoreModelFactory storeModelFactory = InjectorUtilities.instance.provideStoreModelFactory();
-    private ViewPager2 storeViewPager;
+    private StoreListFragment storeListFragment;
+    private AddFragment addFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        storeListFragment = new StoreListFragment();
+        addFragment = new AddFragment();
+        bindUI();
+        setCurrentFragment(storeListFragment);
+    }
+
+    private void bindUI(){
         FloatingActionButton fab = findViewById(R.id.fab);
-        storeViewPager = findViewById(R.id.rvStoreViewPager);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                initUI();
+                intentToAdd();
+            }
+        });
+        FloatingActionButton fab2 = findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intentToList();
             }
         });
     }
 
-    private void initUI() {
-        storeModel = new ViewModelProvider(this).get(StoreModel.class);
-        storeModel.getStores().observe(this, stores -> startViewPager(stores));
+    public void intentToAdd(){
+        setCurrentFragment(addFragment);
     }
-    private void startViewPager(List<Store> storeList){
-        this.storeViewPager.setAdapter(new StorePageAdapter(storeList));
-        this.storeViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+    public void intentToList(){
+        setCurrentFragment(storeListFragment);
+    }
+
+    private FragmentTransaction setCurrentFragment(Fragment fragment){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainFrameLayout, fragment);
+        transaction.commit();
+        return transaction;
     }
 }
