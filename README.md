@@ -1,1 +1,1 @@
-# SalmonCookies---Android
+# SalmonCookies-Android
