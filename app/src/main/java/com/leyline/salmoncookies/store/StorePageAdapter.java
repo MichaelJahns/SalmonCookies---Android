@@ -1,29 +1,38 @@
 package com.leyline.salmoncookies.store;
 
+import android.text.style.AlignmentSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leyline.salmoncookies.R;
 import com.leyline.salmoncookies.views.StoreLocationText;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StorePageAdapter extends RecyclerView.Adapter<StorePageAdapter.StoreViewHolder> {
-    private int storeItemLayout;
     private List<Store> storeList;
+    private OnItemClickListener listener;
 
-    public StorePageAdapter(int layoutId){ storeItemLayout = layoutId;}
+
+    public StorePageAdapter(){
+        this.storeList = new ArrayList<Store>();
+    }
     public StorePageAdapter(List<Store> storeList){
         this.storeList = storeList;
     }
     public void setStoreList(List<Store> stores){
         storeList = stores;
         notifyDataSetChanged();
+    }
+    public Store getStoreAt(int position){
+         return storeList.get(position);
     }
     @NonNull
     @Override
@@ -40,6 +49,12 @@ public class StorePageAdapter extends RecyclerView.Adapter<StorePageAdapter.Stor
         holder.minCust.setText(String.valueOf(store.getMinCustomers()));
         holder.maxCust.setText(String.valueOf(store.getMaxCustomers()));
         holder.salesPerCust.setText(String.valueOf(store.getMinCustomers()));
+        holder.evLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -47,7 +62,7 @@ public class StorePageAdapter extends RecyclerView.Adapter<StorePageAdapter.Stor
         return this.storeList.size();
     }
 
-    public static class StoreViewHolder extends RecyclerView.ViewHolder {
+    class StoreViewHolder extends RecyclerView.ViewHolder {
         private StoreLocationText evLocation;
         private TextView minCust;
         private TextView maxCust;
@@ -59,6 +74,22 @@ public class StorePageAdapter extends RecyclerView.Adapter<StorePageAdapter.Stor
             minCust = itemView.findViewById(R.id.evStoreMinCust);
             maxCust = itemView.findViewById(R.id.evStoreMaxCust);
             salesPerCust = itemView.findViewById(R.id.evStoreSalePerCust);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(listener != null && position != RecyclerView.NO_POSITION){
+                        listener.onItemClick(storeList.get(position));
+                    }
+                }
+            });
         }
+    }
+    public interface OnItemClickListener{
+        void onItemClick(Store store);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
     }
 }

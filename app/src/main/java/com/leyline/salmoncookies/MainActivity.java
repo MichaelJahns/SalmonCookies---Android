@@ -3,14 +3,27 @@ package com.leyline.salmoncookies;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.leyline.salmoncookies.store.Store;
+import com.leyline.salmoncookies.store.StoreViewModel;
+import com.leyline.salmoncookies.util.StoreViewModelFactory;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
+import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private StoreViewModelFactory factory;
+    private StoreViewModel storeViewModel;
     private StoreListFragment storeListFragment;
     private AddFragment addFragment;
 
@@ -18,9 +31,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        factory = new StoreViewModelFactory(getApplication());
+        storeViewModel = new ViewModelProvider(this, factory).get(StoreViewModel.class);
         storeListFragment = new StoreListFragment();
         addFragment = new AddFragment();
         bindUI();
+        observerSetup();
         setCurrentFragment(storeListFragment);
     }
 
@@ -54,4 +70,16 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
         return transaction;
     }
+
+    private void observerSetup() {
+        factory = new StoreViewModelFactory(getApplication());
+        storeViewModel = new ViewModelProvider(this, factory).get(StoreViewModel.class);
+        storeViewModel.getAllStores().observe(this, new Observer<List<Store>>() {
+            @Override
+            public void onChanged(List<Store> stores) {
+                setCurrentFragment(storeListFragment);
+            }
+        });
+    }
+
 }

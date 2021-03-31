@@ -18,13 +18,7 @@ public class StoreRepository{
         storeDAO = db.storeDAO();
         allStores = storeDAO.getAllStores();
     }
-
-    private void asyncFinished(List<Store> storeList){
-        storeSearch.setValue(storeList);
-    }
-
-
-//    REPOSITORY API; exposed to UI
+    //  REPOSITORY API; exposed to UI
     public void insert(Store store){
         new InsertAsyncTask(storeDAO).execute(store);
     }
@@ -45,8 +39,8 @@ public class StoreRepository{
         return storeSearch;
     }
 
-//    ASYNC TASKS to move database operations off of the main thread
-    //    Static so the task doesn't have a reference to the activity, which would be a memory leak
+    // ASYNC TASKS to move database operations off of the main thread
+    // Static so the task doesn't have a reference to the activity, which would be a memory leak
     // because it is static it cannot reference its parents DAO, dao must be passed into constructor
     private static class InsertAsyncTask extends AsyncTask<Store, Void, Void>{
 
