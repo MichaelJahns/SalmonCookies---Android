@@ -9,9 +9,11 @@
     <FrameLayout
         android:id="@+id/mainFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:background="@color/black"
-    />
+        app:layout_constraintBottom_toTopOf="@+id/mainNavigationView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-16dp"
+        android:layout_height="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -35,6 +37,9 @@
 
     <include
         android:id="@+id/mainNavigationView"
-        layout="@layout/fragment_navigation" />
+        layout="@layout/fragment_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

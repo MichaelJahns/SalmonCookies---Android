@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,8 +35,32 @@ public class StoreListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_list, container, false);
         recyclerView = view.findViewById(R.id.rvStore);
-        List<Store> fake = observerSetup();
-        recyclerSetup(fake);
+        observerSetup();
+        recyclerSetup();
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT ) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if(direction == ItemTouchHelper.RIGHT) {
+                    storeViewModel.deleteStore(storeViewPager.getStoreAt(viewHolder.getAdapterPosition()));
+                    Toast.makeText(getContext(), "Store Deleted", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).attachToRecyclerView(recyclerView);
+
+        storeViewPager.setOnItemClickListener(new StorePageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Store store) {
+//
+                Toast.makeText(getContext(),"You got the store now get it to an activity it can be edited in.", Toast.LENGTH_SHORT ).show();
+            }
+        });
+
         Button btn0 = view.findViewById(R.id.btn0);
         btn0.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,8 +90,8 @@ public class StoreListFragment extends Fragment {
         return storeViewModel.getAllStores().getValue();
     }
 
-    private void recyclerSetup(List<Store> stores){
-        storeViewPager = new StorePageAdapter(stores);
+    private void recyclerSetup(){
+        storeViewPager = new StorePageAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(storeViewPager);
     }

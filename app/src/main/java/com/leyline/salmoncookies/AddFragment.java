@@ -9,13 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.leyline.salmoncookies.store.Store;
 import com.leyline.salmoncookies.store.StoreViewModel;
+import com.leyline.salmoncookies.util.StoreViewModelFactory;
 
 public class AddFragment extends Fragment {
     private StoreViewModel storeViewModel;
+    private StoreViewModelFactory factory;
+
     private FloatingActionButton fab;
     EditText etStoreLocation, etStoreAverageSales, etStoreMinCust, etStoreMaxCust;
 
@@ -26,7 +30,8 @@ public class AddFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add, container, false);
-        storeViewModel = new ViewModelProvider(requireActivity()).get(StoreViewModel.class);
+        factory = new StoreViewModelFactory(getActivity().getApplication());
+        storeViewModel = new ViewModelProvider(requireActivity(), factory).get(StoreViewModel.class);
         bindUI(view);
         return view;
     }
@@ -39,6 +44,7 @@ public class AddFragment extends Fragment {
         this.fab = view.findViewById(R.id.fab14);
         this.fab.setOnClickListener(v -> {
             Store userStore = getUserStore(v);
+            storeViewModel.insertStore(userStore);
         });
     }
 
